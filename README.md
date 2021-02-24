@@ -1,6 +1,10 @@
 # PremiumPrivateShop
  Offline Private Shop like Official Servers
 
+# Instructions
+
+Modify in window of design item table the enum for a PRIVATE_SHOP, please, in 7 position if you can, for example I have like this 'INVENTORY','EQUIPMENT','SAFEBOX','MALL','DRAGON_SOUL_INVENTORY','BELT_INVENTORY','PRIVATE_SHOP'
+
 # Visual Parts
 
 You can download the patches from the Official Servers in https://metin2.dev/board/topic/15649-official-unpacked-updates-metin2-new-spam-free/page/3/?tab=comments#comment-136592
