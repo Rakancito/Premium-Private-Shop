@@ -115,7 +115,7 @@ void CShopManager::CreatePremiumPrivateShop(LPCHARACTER ch, DWORD dwNPCVnum, con
 
 	pkPremiumPrivateShop->SetShopVid(dwShopVID);
 
-	ch->SaveAndFlush();
+	ch->DelayedSaveFlush();
 
 	pkShop->SetShopItems(pTable, bItemCount, dwShopVID);
 	m_map_pkPrivateOfflineShop.insert(TOfflinePrivateShopMap::value_type(pkPremiumPrivateShop->GetShopVid(), pkPremiumPrivateShop));
