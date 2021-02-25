@@ -181,9 +181,13 @@ void CShopManager::DestroyPremiumPrivateShop(DWORD dwShopVid)
 		return;
 	}
 
-	for (auto& it : m_map_pkPrivateOfflineShop)
-		if (it.second->GetShopVid() == dwShopVid)
-			m_map_pkPrivateOfflineShop.erase(it.first);
+	for (auto it = m_map_pkPrivateOfflineShop.begin(); it != m_map_pkPrivateOfflineShop.end();)
+	{
+		if ((*it).second->GetShopVid() == dwShopVid)
+			it = m_map_pkPrivateOfflineShop.erase(it);
+		else
+			++it;
+	}
 
 	M2_DELETE(pkPremiumPrivateShop);
 }
