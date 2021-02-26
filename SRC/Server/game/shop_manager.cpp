@@ -71,6 +71,12 @@ void CShopManager::CreatePremiumPrivateShop(LPCHARACTER ch, DWORD dwNPCVnum, con
 		return;
 	}
 
+	if (strlen(szSign) > (SHOP_SIGN_MAX_LEN + 1))
+	{
+		ch->ChatPacket(CHAT_TYPE_INFO, LC_TEXT( "The name of your Shop it's to long."));
+		return;
+	}
+
 	LPSHOP pkShop = M2_NEW CShop;
 	pkShop->SetPremiumPrivateShop(true);
 	pkShop->SetPCShop(ch);
@@ -83,10 +89,16 @@ void CShopManager::CreatePremiumPrivateShop(LPCHARACTER ch, DWORD dwNPCVnum, con
 		return;
 	}
 
+	if (!*szSign)
+		return;
+
+	char szEcapeSign[SHOP_SIGN_MAX_LEN * 2 + 1];
+	DBManager::instance().EscapeString(szEcapeSign, sizeof(szEcapeSign), szSign, strlen(szSign));
+
 	pkPremiumPrivateShop->SetMapIndex(ch->GetMapIndex());
 	pkPremiumPrivateShop->SetXYZ(ch->GetXYZ());
 	pkPremiumPrivateShop->SetOwnerName(ch->GetName());
-	pkPremiumPrivateShop->SetSign(szSign);
+	pkPremiumPrivateShop->SetSign(szEcapeSign);
 	pkPremiumPrivateShop->SetPlayerID(ch->GetPlayerID());
 	sectree->InsertEntity(pkPremiumPrivateShop);
 	pkPremiumPrivateShop->UpdateSectree();
@@ -97,7 +109,7 @@ void CShopManager::CreatePremiumPrivateShop(LPCHARACTER ch, DWORD dwNPCVnum, con
 	{
 		MYSQL_ROW row = mysql_fetch_row(pMsg->Get()->pSQLResult);
 		str_to_number(dwShopVID, row[0]);
-		std::auto_ptr<SQLMsg> pMsg2(DBManager::instance().DirectQuery("UPDATE player.player_shop SET map_index=%d, x=%d, y=%d, z=%d, date_close=FROM_UNIXTIME(%d), race=%d, count=%d, name='%s', status=1 WHERE shop_id=%d", ch->GetMapIndex(), ch->GetX(), ch->GetY(), ch->GetZ(), dwTime, dwNPCVnum, bItemCount, szSign, dwShopVID));
+		std::auto_ptr<SQLMsg> pMsg2(DBManager::instance().DirectQuery("UPDATE player.player_shop SET map_index=%d, x=%d, y=%d, z=%d, date_close=FROM_UNIXTIME(%d), race=%d, count=%d, name='%s', status=1 WHERE shop_id=%d", ch->GetMapIndex(), ch->GetX(), ch->GetY(), ch->GetZ(), dwTime, dwNPCVnum, bItemCount, szEcapeSign, dwShopVID));
 		if(pMsg2->Get()->uiAffectedRows == 0)
 		{
 			sys_err("Update Bank Fail Premium Private Shop %d", dwShopVID);
@@ -106,7 +118,7 @@ void CShopManager::CreatePremiumPrivateShop(LPCHARACTER ch, DWORD dwNPCVnum, con
 	else
 	{
 		std::auto_ptr<SQLMsg> pMsg2(DBManager::instance().DirectQuery("INSERT INTO player.player_shop SET owner_id=%d, owner_name='%s', map_index=%d, x=%d, y=%d, z=%d, date_close=FROM_UNIXTIME(%d), race=%d, count=%d, name='%s'", 
-		ch->GetPlayerID(), ch->GetName(), ch->GetMapIndex(), ch->GetX(), ch->GetY(), ch->GetZ(), dwTime, dwNPCVnum, bItemCount, szSign));
+		ch->GetPlayerID(), ch->GetName(), ch->GetMapIndex(), ch->GetX(), ch->GetY(), ch->GetZ(), dwTime, dwNPCVnum, bItemCount, szEcapeSign));
 		SQLResult * pRes2 = pMsg2->Get();
 
 		dwShopVID = pRes2->uiInsertID;
