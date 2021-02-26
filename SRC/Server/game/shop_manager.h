@@ -19,7 +19,6 @@ public:
 	LPOFFSHOP	FindPremiumPrivateShopByShopVID(DWORD dwVid);
 	LPOFFSHOP	FindPremiumPrivateShopByPlayerID(DWORD dwVid);
 	void	CheckPremiumPrivateShop();
-	void	CheckPremiumPrivateShop();
 	void	DestroyPremiumPrivateShop(DWORD dwShopVid);
 	void	BuildPremiumPrivateShop();
 	void	StartPremiumPrivateShop(LPCHARACTER ch, DWORD dwVid);
