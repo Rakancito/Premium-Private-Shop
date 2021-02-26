@@ -110,10 +110,14 @@ void CShop::SetShopItems(TShopItemTable * pTable, BYTE bItemCount)
 #endif
 
 //Search
+	if (!m_pkPC)
+	{
+		CMonarch::instance().SendtoDBAddMoney(dwTax, ch->GetEmpire(), ch);
+	}
 
 	if (m_pkPC)
 
-//Replace with
+//Replace if (m_pkPC) with
 
 #ifdef ENABLE_PREMIUM_PRIVATE_SHOP
 	if (m_bIsPremiumPrivateShop)
